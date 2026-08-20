@@ -1,0 +1,132 @@
+// HF Agenda — Prisma Schema
+// PostgreSQL database for barbershop booking & CRM
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── ENUMS ───────────────────────────────────────────────────────────────────
+
+enum EstadoCita {
+  PENDIENTE
+  CONFIRMADA
+  COMPLETADA
+  CANCELADA
+  NO_SHOW
+}
+
+enum EtiquetaCliente {
+  NUEVO
+  REGULAR
+  VIP
+  INACTIVO
+}
+
+enum RolUsuario {
+  ADMIN
+  BARBERO
+  RECEPCION
+}
+
+// ─── MODELOS ─────────────────────────────────────────────────────────────────
+
+model Negocio {
+  id        String     @id @default(cuid())
+  nombre    String
+  slug      String     @unique
+  telefono  String?
+  email     String?
+  direccion String?
+  logo      String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  barberos  Barbero[]
+  clientes  Cliente[]
+  servicios Servicio[]
+  citas     Cita[]
+  usuarios  Usuario[]
+}
+
+model Usuario {
+  id        String     @id @default(cuid())
+  nombre    String
+  email     String     @unique
+  password  String
+  rol       RolUsuario @default(RECEPCION)
+  activo    Boolean    @default(true)
+  negocioId String
+  negocio   Negocio    @relation(fields: [negocioId], references: [id])
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Barbero {
+  id        String   @id @default(cuid())
+  nombre    String
+  foto      String?
+  telefono  String?
+  color     String   @default("#6366f1")
+  activo    Boolean  @default(true)
+  negocioId String
+  negocio   Negocio  @relation(fields: [negocioId], references: [id])
+  citas     Cita[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Cliente {
+  id           String          @id @default(cuid())
+  nombre       String
+  telefono     String
+  email        String?
+  notas        String?
+  fechaNac     DateTime?
+  visitas      Int             @default(0)
+  ultimaVisita DateTime?
+  etiqueta     EtiquetaCliente @default(NUEVO)
+  negocioId    String
+  negocio      Negocio         @relation(fields: [negocioId], references: [id])
+  citas        Cita[]
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+}
+
+model Servicio {
+  id        String   @id @default(cuid())
+  nombre    String
+  descripcion String?
+  precio    Float
+  duracion  Int      // minutos
+  color     String   @default("#6366f1")
+  activo    Boolean  @default(true)
+  negocioId String
+  negocio   Negocio  @relation(fields: [negocioId], references: [id])
+  citas     Cita[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Cita {
+  id         String     @id @default(cuid())
+  inicio     DateTime
+  fin        DateTime
+  estado     EstadoCita @default(PENDIENTE)
+  notas      String?
+  precio     Float?
+  clienteId  String
+  cliente    Cliente    @relation(fields: [clienteId], references: [id])
+  barberoId  String
+  barbero    Barbero    @relation(fields: [barberoId], references: [id])
+  servicioId String
+  servicio   Servicio   @relation(fields: [servicioId], references: [id])
+  negocioId  String
+  negocio    Negocio    @relation(fields: [negocioId], references: [id])
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}

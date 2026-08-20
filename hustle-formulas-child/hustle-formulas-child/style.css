@@ -1,0 +1,809 @@
+/*
+ Theme Name:   Hustle Formulas Child
+ Theme URI:    https://hustleformulas.com
+ Description:  Child theme de Cozzy Corner — Diseño premium estilo editorial
+ Author:       Hustle Formulas
+ Author URI:   https://hustleformulas.com
+ Template:     cozycorner
+ Version:      1.0.0
+ Text Domain:  hustle-formulas-child
+*/
+
+/* ============================================================
+   DESIGN TOKENS — Sistema de diseño centralizado
+   ============================================================ */
+:root {
+  /* Colores */
+  --hf-black:        #171717;
+  --hf-white:        #ffffff;
+  --hf-gray-50:      #fafafa;
+  --hf-gray-100:     #f5f5f5;
+  --hf-gray-200:     #e5e7eb;
+  --hf-gray-400:     #9ca3af;
+  --hf-gray-600:     #6b7280;
+  --hf-gray-800:     #1f2937;
+  --hf-red:          #E11D48;
+
+  /* Tipografía */
+  --hf-font:         'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --hf-tracking-tight: -0.03em;
+  --hf-tracking-normal: 0em;
+  --hf-tracking-wide: 0.05em;
+
+  /* Radios */
+  --hf-radius-btn:   60px;
+  --hf-radius-sm:    6px;
+  --hf-radius-md:    10px;
+  --hf-radius-lg:    16px;
+
+  /* Layout */
+  --hf-max-width:    1440px;
+  --hf-pad:          clamp(1.25rem, 3vw, 4rem);
+  --hf-gap:          20px;
+
+  /* Transiciones */
+  --hf-ease:         cubic-bezier(0.4, 0, 0.2, 1);
+  --hf-duration:     0.3s;
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--hf-font) !important;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--hf-black);
+  background: var(--hf-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: inherit; text-decoration: none; }
+
+/* ============================================================
+   TIPOGRAFÍA GLOBAL
+   ============================================================ */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--hf-font) !important;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: var(--hf-tracking-tight);
+  color: var(--hf-black);
+  margin: 0;
+}
+
+/* ============================================================
+   CONTENEDOR GLOBAL
+   ============================================================ */
+.hf-container {
+  max-width: var(--hf-max-width);
+  margin: 0 auto;
+  padding: 0 var(--hf-pad);
+  width: 100%;
+}
+
+/* ============================================================
+   BOTONES GLOBALES — Estilo L3VEL3 pill negro
+   ============================================================ */
+.hf-btn,
+.woocommerce .button,
+.woocommerce button.button,
+.woocommerce a.button,
+.woocommerce input.button,
+.woocommerce #respond input#submit,
+.woocommerce #payment #place_order {
+  font-family: var(--hf-font) !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.01em !important;
+  background: var(--hf-black) !important;
+  color: var(--hf-white) !important;
+  border: 2px solid var(--hf-black) !important;
+  border-radius: var(--hf-radius-btn) !important;
+  padding: 0.75rem 1.75rem !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  transition: background var(--hf-duration) var(--hf-ease),
+              color var(--hf-duration) var(--hf-ease),
+              transform 0.2s var(--hf-ease) !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  box-shadow: none !important;
+}
+
+.hf-btn:hover,
+.woocommerce .button:hover,
+.woocommerce button.button:hover,
+.woocommerce a.button:hover {
+  background: var(--hf-white) !important;
+  color: var(--hf-black) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Botón outline */
+.hf-btn-outline {
+  background: transparent !important;
+  color: var(--hf-black) !important;
+  border: 2px solid var(--hf-black) !important;
+  border-radius: var(--hf-radius-btn) !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  padding: 0.75rem 1.75rem !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background var(--hf-duration) var(--hf-ease),
+              color var(--hf-duration) var(--hf-ease) !important;
+}
+
+.hf-btn-outline:hover {
+  background: var(--hf-black) !important;
+  color: var(--hf-white) !important;
+}
+
+/* ============================================================
+   HEADER — Rediseño minimalista
+   ============================================================ */
+.tx-header,
+.site-header {
+  background: var(--hf-white) !important;
+  border-bottom: 1px solid var(--hf-gray-200) !important;
+  box-shadow: none !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1000 !important;
+}
+
+.header-middle {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 0 var(--hf-pad) !important;
+  height: 70px !important;
+  max-width: var(--hf-max-width) !important;
+  margin: 0 auto !important;
+}
+
+/* Logo */
+.header-logo,
+.site-logo,
+.tx-header .logo {
+  flex-shrink: 0 !important;
+}
+
+.header-logo img,
+.site-logo img {
+  height: 40px !important;
+  width: auto !important;
+}
+
+/* Navegación */
+.primary-menu,
+.main-navigation ul,
+.header-middle nav ul,
+.menu-wrapper .menu {
+  display: flex !important;
+  align-items: center !important;
+  gap: 2rem !important;
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.primary-menu a,
+.main-navigation ul li a,
+.header-middle nav ul li a,
+.menu-wrapper .menu li a {
+  font-family: var(--hf-font) !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  color: var(--hf-black) !important;
+  letter-spacing: 0.01em !important;
+  text-transform: uppercase !important;
+  transition: opacity var(--hf-duration) var(--hf-ease) !important;
+  white-space: nowrap !important;
+}
+
+.primary-menu a:hover,
+.main-navigation ul li a:hover,
+.header-middle nav ul li a:hover {
+  opacity: 0.6 !important;
+}
+
+/* Iconos del header (carrito, cuenta, búsqueda) */
+.header-right,
+.header-icons {
+  display: flex !important;
+  align-items: center !important;
+  gap: 1rem !important;
+}
+
+.header-right a,
+.header-icons a {
+  color: var(--hf-black) !important;
+  font-size: 0 !important;
+  position: relative !important;
+}
+
+/* ============================================================
+   HOTLINE / TOP BAR — ocultar o simplificar
+   ============================================================ */
+.has-hotline .header-hotline,
+.tx-header-hotline {
+  background: var(--hf-black) !important;
+  color: var(--hf-white) !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  text-align: center !important;
+  padding: 0.5rem !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* ============================================================
+   FOOTER — Minimalista
+   ============================================================ */
+.site-footer,
+.footer-area {
+  background: var(--hf-black) !important;
+  color: var(--hf-gray-400) !important;
+  padding: 3rem var(--hf-pad) 2rem !important;
+  font-family: var(--hf-font) !important;
+}
+
+.footer-area a {
+  color: var(--hf-gray-400) !important;
+  font-size: 0.875rem !important;
+  transition: color var(--hf-duration) !important;
+}
+
+.footer-area a:hover {
+  color: var(--hf-white) !important;
+}
+
+/* ============================================================
+   TARJETAS DE PRODUCTO — Estilo editorial L3VEL3
+   ============================================================ */
+.woocommerce ul.products {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: var(--hf-gap) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.woocommerce ul.products li.product {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  float: none !important;
+  width: auto !important;
+  position: relative !important;
+}
+
+/* Wrapper de la tarjeta */
+.product-wrapper {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  position: relative !important;
+  cursor: pointer !important;
+}
+
+/* Imagen */
+.product-wrapper .thumbnail-wrapper {
+  background: var(--hf-gray-100) !important;
+  border-radius: var(--hf-radius-sm) !important;
+  aspect-ratio: 1 / 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  position: relative !important;
+  padding: 1rem !important;
+}
+
+.product-wrapper .thumbnail-wrapper img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  transition: transform 0.5s var(--hf-ease) !important;
+}
+
+.product-wrapper:hover .thumbnail-wrapper img {
+  transform: scale(1.05) !important;
+}
+
+/* Overlay botón "Agregar al carrito" */
+.product-wrapper .thumbnail-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(23, 23, 23, 0.05);
+  opacity: 0;
+  transition: opacity var(--hf-duration) var(--hf-ease);
+  border-radius: var(--hf-radius-sm);
+  pointer-events: none;
+}
+
+.product-wrapper:hover .thumbnail-wrapper::after {
+  opacity: 1;
+}
+
+/* Botón ATC flotante sobre imagen */
+.product-wrapper .product-buttons {
+  position: absolute !important;
+  bottom: 1rem !important;
+  left: 50% !important;
+  transform: translateX(-50%) translateY(4px) !important;
+  z-index: 10 !important;
+  opacity: 0 !important;
+  transition: opacity var(--hf-duration) var(--hf-ease),
+              transform var(--hf-duration) var(--hf-ease) !important;
+  pointer-events: none !important;
+  white-space: nowrap !important;
+}
+
+.product-wrapper:hover .product-buttons {
+  opacity: 1 !important;
+  transform: translateX(-50%) translateY(0) !important;
+  pointer-events: all !important;
+}
+
+.product-wrapper .product-buttons .button,
+.product-wrapper .product-buttons .add_to_cart_button {
+  background: var(--hf-white) !important;
+  color: var(--hf-black) !important;
+  border: 1.5px solid var(--hf-black) !important;
+  border-radius: var(--hf-radius-btn) !important;
+  padding: 0.625rem 1.5rem !important;
+  font-size: 0.8125rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.01em !important;
+  display: inline-block !important;
+  box-shadow: 0 4px 16px rgba(23, 23, 23, 0.15) !important;
+  transition: background var(--hf-duration), color var(--hf-duration) !important;
+  text-transform: none !important;
+  cursor: pointer !important;
+  line-height: 1 !important;
+}
+
+.product-wrapper .product-buttons .button:hover {
+  background: var(--hf-black) !important;
+  color: var(--hf-white) !important;
+}
+
+/* Ocultar quantity input en tarjeta */
+.product-wrapper .product-buttons .quantity {
+  display: none !important;
+}
+
+/* Info del producto */
+.product-wrapper .product-info {
+  position: static !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  padding: 0.75rem 0.25rem 0 !important;
+  display: block !important;
+}
+
+/* Marca/categoría pequeña */
+.product-wrapper .product-info .product-brand,
+.product-wrapper .product-info .product-cat-name {
+  font-size: 0.6875rem !important;
+  font-weight: 500 !important;
+  letter-spacing: var(--hf-tracking-wide) !important;
+  text-transform: uppercase !important;
+  color: var(--hf-gray-600) !important;
+  display: block !important;
+  margin-bottom: 0.25rem !important;
+}
+
+/* Nombre del producto */
+.product-wrapper .product-info h2,
+.product-wrapper .product-info .woocommerce-loop-product__title {
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  color: var(--hf-black) !important;
+  letter-spacing: -0.01em !important;
+  text-transform: none !important;
+  margin: 0 0 0.375rem !important;
+  padding: 0 !important;
+  line-height: 1.3 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: static !important;
+}
+
+/* Precio */
+.product-wrapper .product-info .price {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: static !important;
+  margin: 0 !important;
+}
+
+.product-wrapper .product-info .price > .amount,
+.product-wrapper .product-info .price ins .amount {
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  color: var(--hf-black) !important;
+}
+
+.product-wrapper .product-info .price ins {
+  text-decoration: none !important;
+}
+
+.product-wrapper .product-info .price del .amount {
+  font-size: 0.8125rem !important;
+  font-weight: 400 !important;
+  color: var(--hf-gray-400) !important;
+}
+
+/* Badge oferta */
+.product-wrapper .onsale {
+  position: absolute !important;
+  top: 0.75rem !important;
+  left: 0.75rem !important;
+  background: var(--hf-red) !important;
+  color: var(--hf-white) !important;
+  font-size: 0.6875rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em !important;
+  padding: 0.25rem 0.625rem !important;
+  border-radius: var(--hf-radius-btn) !important;
+  z-index: 5 !important;
+  right: auto !important;
+}
+
+/* Acciones (wishlist, quickview) */
+.product-wrapper .product-actions {
+  position: absolute !important;
+  top: 0.75rem !important;
+  right: 0.75rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.375rem !important;
+  z-index: 10 !important;
+  opacity: 0 !important;
+  transition: opacity var(--hf-duration) var(--hf-ease) !important;
+}
+
+.product-wrapper:hover .product-actions {
+  opacity: 1 !important;
+}
+
+.product-wrapper .product-actions a,
+.product-wrapper .product-actions button {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-radius: 50% !important;
+  width: 36px !important;
+  height: 36px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(23, 23, 23, 0.12) !important;
+  transition: background var(--hf-duration) !important;
+  cursor: pointer !important;
+}
+
+.product-wrapper .product-actions a:hover,
+.product-wrapper .product-actions button:hover {
+  background: var(--hf-black) !important;
+  color: var(--hf-white) !important;
+}
+
+/* Ocultar precio duplicado */
+.product-wrapper .thumbnail-wrapper .price,
+.product-wrapper .thumbnail-wrapper [class*="price"],
+.product-wrapper > .price,
+.woocommerce ul.products li.product > .price {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* ============================================================
+   SHOP PAGE — Página de la tienda
+   ============================================================ */
+.woocommerce-page .woocommerce,
+.archive .woocommerce {
+  max-width: var(--hf-max-width) !important;
+  margin: 0 auto !important;
+  padding: 2rem var(--hf-pad) !important;
+}
+
+/* Título de la tienda */
+.woocommerce-products-header__title,
+.page-title,
+h1.entry-title {
+  font-size: clamp(1.75rem, 3vw, 2.5rem) !important;
+  font-weight: 700 !important;
+  letter-spacing: var(--hf-tracking-tight) !important;
+  margin-bottom: 1.5rem !important;
+}
+
+/* Ordenar y resultados */
+.woocommerce-ordering select,
+.woocommerce-result-count {
+  font-family: var(--hf-font) !important;
+  font-size: 0.875rem !important;
+  color: var(--hf-gray-600) !important;
+}
+
+.woocommerce-ordering select {
+  border: 1px solid var(--hf-gray-200) !important;
+  border-radius: var(--hf-radius-sm) !important;
+  padding: 0.5rem 1rem !important;
+  background: var(--hf-white) !important;
+  cursor: pointer !important;
+}
+
+/* ============================================================
+   SINGLE PRODUCT — Página de producto individual
+   ============================================================ */
+.woocommerce div.product {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 4rem !important;
+  max-width: var(--hf-max-width) !important;
+  margin: 2rem auto !important;
+  padding: 0 var(--hf-pad) !important;
+  align-items: start !important;
+}
+
+/* Galería */
+.woocommerce div.product .woocommerce-product-gallery {
+  position: sticky !important;
+  top: 90px !important;
+}
+
+.woocommerce div.product .woocommerce-product-gallery__image img {
+  border-radius: var(--hf-radius-md) !important;
+  background: var(--hf-gray-100) !important;
+}
+
+/* Info del producto */
+.woocommerce div.product .summary {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1rem !important;
+}
+
+.woocommerce div.product .product_title {
+  font-size: clamp(1.5rem, 2.5vw, 2rem) !important;
+  font-weight: 700 !important;
+  letter-spacing: var(--hf-tracking-tight) !important;
+  line-height: 1.1 !important;
+  margin: 0 !important;
+}
+
+.woocommerce div.product p.price,
+.woocommerce div.product span.price {
+  font-size: 1.375rem !important;
+  font-weight: 600 !important;
+  color: var(--hf-black) !important;
+}
+
+.woocommerce div.product p.price del,
+.woocommerce div.product span.price del {
+  color: var(--hf-gray-400) !important;
+  font-weight: 400 !important;
+  font-size: 1rem !important;
+  margin-right: 0.5rem !important;
+}
+
+.woocommerce div.product p.price ins {
+  text-decoration: none !important;
+  color: var(--hf-red) !important;
+}
+
+/* Botón ATC en single product */
+.woocommerce div.product .single_add_to_cart_button,
+.woocommerce div.product form.cart .button {
+  width: 100% !important;
+  padding: 1rem 2rem !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  margin-top: 0.5rem !important;
+}
+
+/* Tabs descripción */
+.woocommerce div.product .woocommerce-tabs ul.tabs {
+  border-bottom: 1px solid var(--hf-gray-200) !important;
+  padding: 0 !important;
+  margin: 2rem 0 0 !important;
+}
+
+.woocommerce div.product .woocommerce-tabs ul.tabs li {
+  border: none !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+
+.woocommerce div.product .woocommerce-tabs ul.tabs li a {
+  font-family: var(--hf-font) !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  color: var(--hf-gray-600) !important;
+  padding: 0.75rem 1rem !important;
+  display: block !important;
+  border-bottom: 2px solid transparent !important;
+  transition: color var(--hf-duration), border-color var(--hf-duration) !important;
+}
+
+.woocommerce div.product .woocommerce-tabs ul.tabs li.active a {
+  color: var(--hf-black) !important;
+  border-bottom-color: var(--hf-black) !important;
+}
+
+/* ============================================================
+   CARRITO
+   ============================================================ */
+.woocommerce-cart .woocommerce {
+  max-width: var(--hf-max-width) !important;
+  margin: 2rem auto !important;
+  padding: 0 var(--hf-pad) !important;
+}
+
+.woocommerce table.cart {
+  border-collapse: collapse !important;
+  width: 100% !important;
+}
+
+.woocommerce table.cart th {
+  font-family: var(--hf-font) !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  letter-spacing: var(--hf-tracking-wide) !important;
+  text-transform: uppercase !important;
+  color: var(--hf-gray-600) !important;
+  border-bottom: 1px solid var(--hf-gray-200) !important;
+  padding: 0.75rem 0 !important;
+}
+
+.woocommerce table.cart td {
+  border-bottom: 1px solid var(--hf-gray-200) !important;
+  padding: 1.25rem 0 !important;
+  vertical-align: middle !important;
+}
+
+.cart-collaterals .cart_totals h2 {
+  font-size: 1.125rem !important;
+  font-weight: 700 !important;
+  letter-spacing: var(--hf-tracking-tight) !important;
+  margin-bottom: 1rem !important;
+}
+
+/* ============================================================
+   CHECKOUT
+   ============================================================ */
+.woocommerce-checkout .woocommerce {
+  max-width: 800px !important;
+  margin: 2rem auto !important;
+  padding: 0 var(--hf-pad) !important;
+}
+
+.woocommerce-checkout input,
+.woocommerce-checkout select,
+.woocommerce-checkout textarea {
+  font-family: var(--hf-font) !important;
+  border: 1px solid var(--hf-gray-200) !important;
+  border-radius: var(--hf-radius-sm) !important;
+  padding: 0.75rem 1rem !important;
+  font-size: 0.9375rem !important;
+  transition: border-color var(--hf-duration) !important;
+}
+
+.woocommerce-checkout input:focus,
+.woocommerce-checkout select:focus,
+.woocommerce-checkout textarea:focus {
+  border-color: var(--hf-black) !important;
+  outline: none !important;
+}
+
+/* ============================================================
+   SECCIÓN HOME — Productos destacados
+   ============================================================ */
+.hf-section {
+  padding: 4rem 0;
+}
+
+.hf-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding: 0 var(--hf-pad);
+  max-width: var(--hf-max-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hf-section-title {
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 700;
+  letter-spacing: var(--hf-tracking-tight);
+  text-transform: uppercase;
+}
+
+.hf-see-all {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--hf-black);
+  border-bottom: 1px solid var(--hf-black);
+  padding-bottom: 1px;
+  transition: opacity var(--hf-duration);
+}
+
+.hf-see-all:hover {
+  opacity: 0.6;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1200px) {
+  .woocommerce ul.products {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .woocommerce div.product {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+
+  .woocommerce div.product .woocommerce-product-gallery {
+    position: static !important;
+  }
+
+  .woocommerce ul.products {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .header-middle {
+    height: 60px !important;
+    padding: 0 1rem !important;
+  }
+
+  .woocommerce ul.products {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .product-wrapper .thumbnail-wrapper {
+    aspect-ratio: 1 / 1 !important;
+  }
+
+  .hf-section {
+    padding: 2.5rem 0;
+  }
+}
