@@ -10,9 +10,12 @@ const loginSchema = z.object({
 });
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  trustHost: true, // Requerido para EasyPanel / Proxies inversos
+  secret: process.env.AUTH_SECRET || "hf-agenda-secret-key-production-32-chars-2026",
   session: { strategy: "jwt" },
   pages: {
     signIn: "/login",
+    error: "/login",
   },
   providers: [
     CredentialsProvider({
