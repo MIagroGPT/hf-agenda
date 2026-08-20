@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -39,6 +39,12 @@ export default function CitasPage() {
     extendedProps: { cita: c },
   }));
 
+  function handleOpenNewModal(dateStr?: string) {
+    setSelectedCita(null);
+    setSelectedDate(dateStr || new Date().toISOString());
+    setModalOpen(true);
+  }
+
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
@@ -47,7 +53,7 @@ export default function CitasPage() {
           <p className="text-sm text-neutral-500 mt-1">Gestiona el calendario de tu barbería</p>
         </div>
         <button
-          onClick={() => { setSelectedCita(null); setModalOpen(true); }}
+          onClick={() => handleOpenNewModal()}
           className="flex items-center gap-2 px-4 py-2.5 bg-[#D4AF37] hover:bg-[#c9a82e] text-black text-sm font-semibold rounded-xl transition-all"
         >
           <Plus className="w-4 h-4" />
@@ -95,9 +101,10 @@ export default function CitasPage() {
             });
           }}
           select={(info) => {
-            setSelectedDate(info.startStr);
-            setSelectedCita(null);
-            setModalOpen(true);
+            handleOpenNewModal(info.startStr);
+          }}
+          dateClick={(info) => {
+            handleOpenNewModal(info.dateStr);
           }}
           eventClick={(info) => {
             setSelectedCita(info.event.extendedProps.cita);
