@@ -1,23 +1,20 @@
-# ─── Stage 1: Dependencies ────────────────────────────────────
-FROM node:20-alpine AS deps
-RUN apk add --no-cache libc6-compat openssl
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --only=production
-
-# ─── Stage 2: Builder ─────────────────────────────────────────
+# ─── Stage 1: Builder ─────────────────────────────────────────
 FROM node:20-alpine AS builder
 RUN apk add --no-cache libc6-compat openssl
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 COPY . .
-COPY .env.example .env
-RUN npx prisma generate
+
+# Variables placeholder para la fase de compilación
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV DATABASE_URL="postgresql://postgres:postgres@localhost:5432/hfagenda"
+ENV AUTH_SECRET="build-placeholder-secret-key-32chars"
+
+RUN npx prisma generate
 RUN npm run build
 
-# ─── Stage 3: Runner ──────────────────────────────────────────
+# ─── Stage 2: Runner ──────────────────────────────────────────
 FROM node:20-alpine AS runner
 RUN apk add --no-cache openssl
 WORKDIR /app
@@ -32,6 +29,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
 USER nextjs
 EXPOSE 3000
