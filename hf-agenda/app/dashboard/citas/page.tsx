@@ -8,6 +8,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { Plus } from "lucide-react";
 import { CitaModal } from "@/components/calendar/cita-modal";
+import { isBefore, startOfToday } from "date-fns";
 
 export default function CitasPage() {
   const calendarRef = useRef<any>(null);
@@ -40,8 +41,18 @@ export default function CitasPage() {
   }));
 
   function handleOpenNewModal(dateStr?: string) {
+    if (dateStr) {
+      const clicked = new Date(dateStr);
+      // Si hizo clic en un día pasado, no permitir abrir o avanzar a hoy
+      if (isBefore(clicked, startOfToday())) {
+        setSelectedDate(new Date().toISOString());
+      } else {
+        setSelectedDate(dateStr);
+      }
+    } else {
+      setSelectedDate(new Date().toISOString());
+    }
     setSelectedCita(null);
-    setSelectedDate(dateStr || new Date().toISOString());
     setModalOpen(true);
   }
 
@@ -67,7 +78,7 @@ export default function CitasPage() {
           {barberos.map((b: any) => (
             <span key={b.id} className="flex items-center gap-1.5 text-xs text-neutral-400">
               <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: b.color }} />
-              {b.nombre}
+              {b.nombre} ({b.horaInicio || "09:00"} - {b.horaFin || "20:00"})
             </span>
           ))}
         </div>
@@ -94,6 +105,10 @@ export default function CitasPage() {
           slotMaxTime="22:00:00"
           allDaySlot={false}
           height="auto"
+          selectAllow={(selectInfo) => {
+            // Bloquear selección en fechas pasadas
+            return selectInfo.start >= new Date(Date.now() - 60 * 1000);
+          }}
           datesSet={(info) => {
             setRango({
               inicio: info.startStr,
@@ -111,6 +126,11 @@ export default function CitasPage() {
             setModalOpen(true);
           }}
           eventDrop={async (info) => {
+            if (info.event.start && info.event.start < new Date()) {
+              alert("No puedes mover una cita al pasado.");
+              info.revert();
+              return;
+            }
             await fetch("/api/citas", {
               method: "PATCH",
               headers: { "Content-Type": "application/json" },

@@ -3,11 +3,12 @@ import { z } from "zod";
 export const citaSchema = z.object({
   inicio: z.string().datetime(),
   fin: z.string().datetime(),
-  clienteId: z.string().cuid(),
-  barberoId: z.string().cuid(),
-  servicioId: z.string().cuid(),
+  clienteId: z.string().min(1, "El cliente es requerido"),
+  barberoId: z.string().min(1, "El barbero es requerido"),
+  servicioId: z.string().min(1, "El servicio es requerido"),
   notas: z.string().optional(),
   precio: z.number().positive().optional(),
+  estado: z.enum(["PENDIENTE", "CONFIRMADA", "COMPLETADA", "CANCELADA", "NO_SHOW"]).optional(),
 });
 
 export const clienteSchema = z.object({
@@ -23,6 +24,9 @@ export const barberoSchema = z.object({
   nombre: z.string().min(2, "El nombre es obligatorio"),
   telefono: z.string().optional(),
   color: z.string().regex(/^#[0-9A-Fa-f]{6}$/).default("#6366f1"),
+  horaInicio: z.string().default("09:00"),
+  horaFin: z.string().default("20:00"),
+  diasTrabajo: z.string().default("1,2,3,4,5,6"),
 });
 
 export const servicioSchema = z.object({

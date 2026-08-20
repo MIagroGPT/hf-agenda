@@ -67,17 +67,20 @@ model Usuario {
 }
 
 model Barbero {
-  id        String   @id @default(cuid())
-  nombre    String
-  foto      String?
-  telefono  String?
-  color     String   @default("#6366f1")
-  activo    Boolean  @default(true)
-  negocioId String
-  negocio   Negocio  @relation(fields: [negocioId], references: [id])
-  citas     Cita[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  nombre      String
+  foto        String?
+  telefono    String?
+  color       String   @default("#6366f1")
+  activo      Boolean  @default(true)
+  horaInicio  String   @default("09:00") // Formato "HH:mm"
+  horaFin     String   @default("20:00") // Formato "HH:mm"
+  diasTrabajo String   @default("1,2,3,4,5,6") // 0=Dom, 1=Lun, 2=Mar, 3=Mie, 4=Jue, 5=Vie, 6=Sab
+  negocioId   String
+  negocio     Negocio  @relation(fields: [negocioId], references: [id])
+  citas       Cita[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Cliente {
