@@ -3,7 +3,16 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   try {
-    // Negocio demo
+    // 1. Asegurar columnas en la base de datos PostgreSQL
+    try {
+      await prisma.$executeRawUnsafe(`ALTER TABLE "Barbero" ADD COLUMN IF NOT EXISTS "horaInicio" TEXT NOT NULL DEFAULT '09:00';`);
+      await prisma.$executeRawUnsafe(`ALTER TABLE "Barbero" ADD COLUMN IF NOT EXISTS "horaFin" TEXT NOT NULL DEFAULT '20:00';`);
+      await prisma.$executeRawUnsafe(`ALTER TABLE "Barbero" ADD COLUMN IF NOT EXISTS "diasTrabajo" TEXT NOT NULL DEFAULT '1,2,3,4,5,6';`);
+    } catch (e) {
+      console.log("Columnas ya existentes o error ignorado:", e);
+    }
+
+    // 2. Negocio demo
     const negocio = await prisma.negocio.upsert({
       where: { slug: "hustle-formulas" },
       update: {},
@@ -15,7 +24,7 @@ export async function GET() {
       },
     });
 
-    // Usuario admin (Password: admin123)
+    // 3. Usuario admin (Password: admin123)
     const passwordHash = "$2b$12$UtrIgd/Ic.Swm8KUEiWJ9ONfx1pAdrQzihY4tyhJcaH8Cjd94q5a.";
     await prisma.usuario.upsert({
       where: { email: "admin@hustleformulas.com" },
@@ -29,26 +38,62 @@ export async function GET() {
       },
     });
 
-    // Barberos
+    // 4. Barberos con horarios
     const barberos = await Promise.all([
       prisma.barbero.upsert({
         where: { id: "barb-1" },
-        update: {},
-        create: { id: "barb-1", nombre: "Carlos Ramírez", color: "#D4AF37", negocioId: negocio.id },
+        update: {
+          horaInicio: "09:00",
+          horaFin: "20:00",
+          diasTrabajo: "1,2,3,4,5,6",
+        },
+        create: {
+          id: "barb-1",
+          nombre: "Carlos Ramírez",
+          color: "#D4AF37",
+          horaInicio: "09:00",
+          horaFin: "20:00",
+          diasTrabajo: "1,2,3,4,5,6",
+          negocioId: negocio.id,
+        },
       }),
       prisma.barbero.upsert({
         where: { id: "barb-2" },
-        update: {},
-        create: { id: "barb-2", nombre: "Miguel Torres", color: "#6366f1", negocioId: negocio.id },
+        update: {
+          horaInicio: "10:00",
+          horaFin: "19:00",
+          diasTrabajo: "1,2,3,4,5",
+        },
+        create: {
+          id: "barb-2",
+          nombre: "Miguel Torres",
+          color: "#6366f1",
+          horaInicio: "10:00",
+          horaFin: "19:00",
+          diasTrabajo: "1,2,3,4,5",
+          negocioId: negocio.id,
+        },
       }),
       prisma.barbero.upsert({
         where: { id: "barb-3" },
-        update: {},
-        create: { id: "barb-3", nombre: "Luis García", color: "#10b981", negocioId: negocio.id },
+        update: {
+          horaInicio: "11:00",
+          horaFin: "21:00",
+          diasTrabajo: "2,3,4,5,6",
+        },
+        create: {
+          id: "barb-3",
+          nombre: "Luis García",
+          color: "#10b981",
+          horaInicio: "11:00",
+          horaFin: "21:00",
+          diasTrabajo: "2,3,4,5,6",
+          negocioId: negocio.id,
+        },
       }),
     ]);
 
-    // Servicios
+    // 5. Servicios
     const servicios = await Promise.all([
       prisma.servicio.upsert({
         where: { id: "serv-1" },
@@ -72,7 +117,7 @@ export async function GET() {
       }),
     ]);
 
-    // Clientes demo
+    // 6. Clientes demo
     const clientes = await Promise.all([
       prisma.cliente.upsert({
         where: { id: "cli-1" },
@@ -91,41 +136,10 @@ export async function GET() {
       }),
     ]);
 
-    // Citas de hoy
-    const hoy = new Date();
-    const citas = [
-      { clienteId: clientes[0].id, barberoId: barberos[0].id, servicioId: servicios[1].id, estado: "CONFIRMADA" as const, inicio: 10, fin: 11, precio: 250 },
-      { clienteId: clientes[1].id, barberoId: barberos[1].id, servicioId: servicios[0].id, estado: "PENDIENTE" as const, inicio: 11, fin: 11.5, precio: 150 },
-      { clienteId: clientes[2].id, barberoId: barberos[0].id, servicioId: servicios[3].id, estado: "PENDIENTE" as const, inicio: 12, fin: 12.5, precio: 120 },
-    ];
-
-    for (const c of citas) {
-      const inicio = new Date(hoy);
-      inicio.setHours(c.inicio, 0, 0, 0);
-      const fin = new Date(hoy);
-      fin.setHours(Math.floor(c.fin), c.fin % 1 === 0.5 ? 30 : 0, 0, 0);
-
-      await prisma.cita.create({
-        data: {
-          inicio,
-          fin,
-          estado: c.estado,
-          precio: c.precio,
-          clienteId: c.clienteId,
-          barberoId: c.barberoId,
-          servicioId: c.servicioId,
-          negocioId: negocio.id,
-        },
-      });
-    }
-
     return NextResponse.json({
       ok: true,
-      mensaje: "✅ Base de datos inicializada con éxito!",
-      credenciales: {
-        email: "admin@hustleformulas.com",
-        password: "admin123",
-      },
+      mensaje: "✅ Base de datos y Barberos actualizados con éxito!",
+      barberos: barberos.map((b) => ({ nombre: b.nombre, horario: `${b.horaInicio} - ${b.horaFin}` })),
     });
   } catch (error: any) {
     return NextResponse.json({ ok: false, error: error.message }, { status: 500 });

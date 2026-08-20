@@ -30,7 +30,10 @@ export default function BarberosPage() {
 
   const { data: barberos = [], isLoading } = useQuery({
     queryKey: ["barberos"],
-    queryFn: () => fetch("/api/barberos").then((r) => r.json()),
+    queryFn: () =>
+      fetch("/api/barberos")
+        .then((r) => r.json())
+        .then((d) => (Array.isArray(d) ? d : [])),
   });
 
   function toggleDia(diaId: string) {
