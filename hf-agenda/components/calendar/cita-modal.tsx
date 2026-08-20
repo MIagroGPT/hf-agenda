@@ -538,6 +538,38 @@ export function CitaModal({ open, onClose, cita, defaultDate, onSuccess }: CitaM
             />
           </div>
 
+          {/* Botón rápido de cobro si la cita ya existe y no está completada */}
+          {cita && form.estado !== "COMPLETADA" && (
+            <button
+              type="button"
+              disabled={loading}
+              onClick={async () => {
+                setLoading(true);
+                try {
+                  const res = await fetch("/api/citas", {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      id: cita.id,
+                      estado: "COMPLETADA",
+                      precio: form.precio ? parseFloat(form.precio) : undefined,
+                    }),
+                  });
+                  if (!res.ok) throw new Error("Error al marcar como cobrada");
+                  onSuccess();
+                } catch (e: any) {
+                  setError(e.message);
+                } finally {
+                  setLoading(false);
+                }
+              }}
+              className="w-full py-2.5 bg-emerald-500/15 border border-emerald-500/40 hover:bg-emerald-500/25 text-emerald-300 font-semibold rounded-xl text-xs transition-all flex items-center justify-center gap-2"
+            >
+              <Check className="w-4 h-4 text-emerald-400" />
+              ✓ Marcar como Atendida y Cobrada ({form.precio ? `$${form.precio} MXN` : ""})
+            </button>
+          )}
+
           {error && (
             <p className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-3 py-2.5">
               {error}

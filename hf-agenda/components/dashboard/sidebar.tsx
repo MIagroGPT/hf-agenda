@@ -8,17 +8,19 @@ import {
   Users,
   Scissors,
   ListChecks,
+  TrendingUp,
   Settings,
   ChevronRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
-  { href: "/dashboard",          label: "Dashboard",  icon: LayoutDashboard },
-  { href: "/dashboard/citas",    label: "Citas",      icon: CalendarDays },
-  { href: "/dashboard/clientes", label: "Clientes",   icon: Users },
-  { href: "/dashboard/barberos", label: "Barberos",   icon: Scissors },
-  { href: "/dashboard/servicios",label: "Servicios",  icon: ListChecks },
+  { href: "/dashboard",          label: "Dashboard",       icon: LayoutDashboard },
+  { href: "/dashboard/citas",    label: "Citas",           icon: CalendarDays },
+  { href: "/dashboard/ventas",   label: "Ventas & Reportes", icon: TrendingUp },
+  { href: "/dashboard/clientes", label: "Clientes",        icon: Users },
+  { href: "/dashboard/barberos", label: "Barberos",        icon: Scissors },
+  { href: "/dashboard/servicios",label: "Servicios",       icon: ListChecks },
 ];
 
 export function Sidebar() {
