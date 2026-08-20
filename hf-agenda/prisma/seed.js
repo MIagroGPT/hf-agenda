@@ -1,5 +1,4 @@
 const { PrismaClient } = require("@prisma/client");
-const bcrypt = require("bcryptjs");
 
 const prisma = new PrismaClient();
 
@@ -18,15 +17,15 @@ async function main() {
     },
   });
 
-  // Usuario admin
-  const password = await bcrypt.hash("admin123", 12);
+  // Usuario admin (Hash precalculado para "admin123")
+  const passwordHash = "$2b$12$UtrIgd/Ic.Swm8KUEiWJ9ONfx1pAdrQzihY4tyhJcaH8Cjd94q5a.";
   await prisma.usuario.upsert({
     where: { email: "admin@hustleformulas.com" },
-    update: { password },
+    update: { password: passwordHash },
     create: {
       nombre: "Admin Hustle",
       email: "admin@hustleformulas.com",
-      password,
+      password: passwordHash,
       rol: "ADMIN",
       negocioId: negocio.id,
     },
